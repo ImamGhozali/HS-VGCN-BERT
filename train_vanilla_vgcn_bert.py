@@ -49,7 +49,7 @@ Configuration
 '''
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--ds', type=str, default='mr')
+parser.add_argument('--ds', type=str, default='2019')
 parser.add_argument('--load', type=int, default=0)
 parser.add_argument('--sw', type=int, default='0')
 parser.add_argument('--lr', type=float, default=1e-5)
@@ -86,7 +86,7 @@ bert_model_scale = 'indolem/indobertweet-base-uncased'
 do_lower_case = True
 warmup_proportion = 0.1
 
-data_dir='C:/Users/USER/Documents/VGCN-BERT/VGCN-BERT-master/data/vgcn_bert'
+data_dir='/Users/imamghozali/Documents/HS-VGCN-BERT/data/vgcn_bert'
 output_dir = 'output/'
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
@@ -151,7 +151,6 @@ gcn_vocab_size=len(gcn_vocab_map)
 train_size = len(train_y)
 valid_size = len(valid_y)
 test_size = len(test_y)
-
 indexs = np.arange(0, len(examples))
 train_examples = [examples[i] for i in indexs[:train_size]]
 valid_examples = [examples[i] for i in indexs[train_size:train_size+valid_size]]
@@ -214,7 +213,6 @@ def get_pytorch_dataloader(examples, tokenizer, batch_size, shuffle_choice, clas
                                 sampler=sampler,
                                 num_workers=4,
                                 collate_fn=ds.pad)
-
 train_dataloader = get_pytorch_dataloader(train_examples, tokenizer, batch_size, shuffle_choice=0 )
 valid_dataloader = get_pytorch_dataloader(valid_examples, tokenizer, batch_size, shuffle_choice=0 )
 test_dataloader = get_pytorch_dataloader(test_examples, tokenizer, batch_size, shuffle_choice=0 )
@@ -249,7 +247,7 @@ def evaluate(model, gcn_adj_list,predict_dataloader, batch_size, epoch_th, datas
             input_ids, input_mask, segment_ids, y_prob, label_ids, gcn_swop_eye = batch
             # the parameter label_ids is None, model return the prediction score
             logits = model(gcn_adj_list,gcn_swop_eye,input_ids,  segment_ids, input_mask)
-
+            
             if cfg_loss_criterion=='mse':
                 if do_softmax_before_mse:
                     logits=F.softmax(logits,-1)
@@ -320,7 +318,6 @@ for epoch in range(start_epoch, total_train_epochs):
     ep_train_start = time.time()
     model.train()
     optimizer.zero_grad()
-    os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
     # for step, batch in enumerate(tqdm(train_dataloader, desc="Iteration")):
     if __name__ == '__main__':
         for step, batch in enumerate(train_dataloader):
@@ -356,27 +353,27 @@ for epoch in range(start_epoch, total_train_epochs):
                 print("Epoch:{}-{}/{}, Train {} Loss: {}, Cumulated time: {}m ".format(epoch, step, len(train_dataloader), cfg_loss_criterion,loss.item(),(time.time() - train_start)/60.0))
 
         print('--------------------------------------------------------------')
-        valid_loss,valid_acc,perform_metrics = evaluate(model, gcn_adj_list, valid_dataloader, batch_size, epoch, 'Valid_set')
+        # valid_loss,valid_acc,perform_metrics = evaluate(model, gcn_adj_list, valid_dataloader, batch_size, epoch, 'Valid_set')
         test_loss,_,test_f1 = evaluate(model, gcn_adj_list, test_dataloader, batch_size, epoch, 'Test_set')
         all_loss_list['train'].append(tr_loss)
-        all_loss_list['valid'].append(valid_loss)
+        # all_loss_list['valid'].append(valid_loss)
         all_loss_list['test'].append(test_loss)
-        all_f1_list['valid'].append(perform_metrics)
+        # all_f1_list['valid'].append(perform_metrics)
         all_f1_list['test'].append(test_f1)
-        print("Epoch:{} completed, Total Train Loss:{}, Valid Loss:{}, Spend {}m ".format(epoch, tr_loss, valid_loss, (time.time() - train_start)/60.0))
+        print("Epoch:{} completed, Total Train Loss:{}, Spend {}m ".format(epoch, tr_loss, (time.time() - train_start)/60.0))
         # Save a checkpoint
         # if valid_acc > valid_acc_prev:
-        if perform_metrics > perform_metrics_prev:
-            to_save={'epoch': epoch, 'model_state': model.state_dict(),
-                        'valid_acc': valid_acc, 'lower_case': do_lower_case,
-                        'perform_metrics':perform_metrics}
-            torch.save(to_save, os.path.join(output_dir, model_file_save))
-            # valid_acc_prev = valid_acc
-            perform_metrics_prev = perform_metrics
-            test_f1_when_valid_best=test_f1
-            # train_f1_when_valid_best=tr_f1
-            valid_f1_best_epoch=epoch
+        # if perform_metrics > perform_metrics_prev:
+        #     to_save={'epoch': epoch, 'model_state': model.state_dict(),
+        #                 'valid_acc': valid_acc, 'lower_case': do_lower_case,
+        #                 'perform_metrics':perform_metrics}
+        #     torch.save(to_save, os.path.join(output_dir, model_file_save))
+        #     # valid_acc_prev = valid_acc
+        #     perform_metrics_prev = perform_metrics
+        #     test_f1_when_valid_best=test_f1
+        #     # train_f1_when_valid_best=tr_f1
+        #     valid_f1_best_epoch=epoch
 
-        print('\n**Optimization Finished!,Total spend:',(time.time() - train_start)/60.0)
-        print("**Valid weighted F1: %.3f at %d epoch."%(100*perform_metrics_prev,valid_f1_best_epoch))
-        print("**Test weighted F1 when valid best: %.3f"%(100*test_f1_when_valid_best))
+        # print('\n**Optimization Finished!,Total spend:',(time.time() - train_start)/60.0)
+        # print("**Valid weighted F1: %.3f at %d epoch."%(100*perform_metrics_prev,valid_f1_best_epoch))
+        # print("**Test weighted F1 when valid best: %.3f"%(100*test_f1_when_valid_best))

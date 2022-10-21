@@ -47,7 +47,7 @@ PRETRAINED_MODEL_ARCHIVE_MAP = {
     'bert-large-uncased-whole-word-masking-finetuned-squad': "https://s3.amazonaws.com/models.huggingface.co/bert/bert-large-uncased-whole-word-masking-finetuned-squad-pytorch_model.bin",
     'bert-large-cased-whole-word-masking-finetuned-squad': "https://s3.amazonaws.com/models.huggingface.co/bert/bert-large-cased-whole-word-masking-finetuned-squad-pytorch_model.bin",
     'bert-base-cased-finetuned-mrpc': "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-cased-finetuned-mrpc-pytorch_model.bin",
-    'indolem/indobertweet-base-uncased':"https://cdn-lfs.huggingface.co/indolem/indobertweet-base-uncased/0458da00a6c97795f5ada15c8c430871e33b400d81a72059a5ee2f28ce272202?response-content-disposition=attachment%3B%20filename%3D%22pytorch_model.bin%22"
+    'indolem/indobertweet-base-uncased':"https://cdn-lfs.huggingface.co/indolem/indobertweet-base-uncased/0458da00a6c97795f5ada15c8c430871e33b400d81a72059a5ee2f28ce272202?response-content-disposition=attachment%3B%20filename%3D%22pytorch_model.bin%22&Expires=1666296026&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZG4tbGZzLmh1Z2dpbmdmYWNlLmNvL2luZG9sZW0vaW5kb2JlcnR3ZWV0LWJhc2UtdW5jYXNlZC8wNDU4ZGEwMGE2Yzk3Nzk1ZjVhZGExNWM4YzQzMDg3MWUzM2I0MDBkODFhNzIwNTlhNWVlMmYyOGNlMjcyMjAyP3Jlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249YXR0YWNobWVudCUzQiUyMGZpbGVuYW1lJTNEJTIycHl0b3JjaF9tb2RlbC5iaW4lMjIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NjYyOTYwMjZ9fX1dfQ__&Signature=LxGsutWVhMyQ3qTwlkhSV5~edz9ANBEVMWGTnkpq8pUjYoPcFzfcdkvK9oSSCyCgWVGBzrHnfd2SBrY8WV8TlKc8zGpfyymfBXQ5f9HJvYhBf1HAcj9jtYZILI4lV-Lgi0PHh8O0WnEW1uA1s74JVgVIAYTPgRO0kag2JyGeUIDddXGT-kN8FUZ3iTHzn-5~TVU9MiImxpiLuGqGzsycAnNxg9t0KiBv3Z2M7QlmyHtDyvjntQYzS-SkvQK7dZ0Sye3L7MVGQ97p8RCiYT3pJTQNO8ziV554qkNAX51HvoPMAtMajaFMQP6UX1XZ~ZZrMbypTnadbFOlJaP4H7-G1w__&Key-Pair-Id=KVTP0A1DKRTAX"
 }
 PRETRAINED_CONFIG_ARCHIVE_MAP = {
     'bert-base-uncased': "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-config.json",
@@ -717,6 +717,7 @@ class BertPreTrainedModel(nn.Module):
         # Instantiate model.
         model = cls(config, *inputs, **kwargs)
         if state_dict is None and not from_tf:
+            print(resolved_archive_file)
             state_dict = torch.load(resolved_archive_file, map_location='cpu')
         if from_tf:
             # Directly load from a TensorFlow checkpoint

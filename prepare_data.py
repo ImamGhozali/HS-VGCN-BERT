@@ -58,7 +58,7 @@ if cfg_ds not in dataset_list:
     sys.exit("Dataset choice error!")
 
 will_dump_objects=True
-dump_dir='C:/Users/USER/Documents/VGCN-BERT/VGCN-BERT-master/data/vgcn_bert'
+dump_dir='/Users/imamghozali/Documents/HS-VGCN-BERT/data/vgcn_bert'
 if not os.path.exists(dump_dir):
     os.mkdir(dump_dir)
 
@@ -66,7 +66,7 @@ if not os.path.exists(dump_dir):
 #     freq_min_for_word_choice=5 
 #     # freq_min_for_word_choice=10 #best
 # else:
-freq_min_for_word_choice=10 # for bert+
+freq_min_for_word_choice=2 # for bert+
 
 valid_data_taux = 0.05 
 test_data_taux = 0.10
@@ -169,14 +169,15 @@ def preprocess(text):
     text = stemming(text)
     return text
 #%%
-id_stopword_dict = pd.read_csv("C:/Users/USER/Documents/VGCN-BERT/VGCN-BERT-master/data/stopwordbahasa.csv", header=None)
+
+id_stopword_dict = pd.read_csv("/Users/imamghozali/Documents/HS-VGCN-BERT/data/stopwordbahasa.csv", header=None)
 # id_stopword_dict = pd.read_csv("/Users/imamghozali/Documents/Master/Semester1/RPL/Data/stopwordbahasa.csv", header=None)
 id_stopword_dict = id_stopword_dict.rename(columns={0: 'stopword'})
 
 # print(id_stopword_dict)
-df = pd.read_csv("C:/Users/USER/Documents/VGCN-BERT/VGCN-BERT-master/data/re_dataset.csv", error_bad_lines=False, encoding='latin-1')
+df = pd.read_csv("/Users/imamghozali/Documents/HS-VGCN-BERT/data/re_dataset.csv", error_bad_lines=False, encoding='latin-1')
 # data = pd.read_csv("/Users/imamghozali/Documents/Master/Semester1/RPL/Data/re_dataset.csv",  encoding='latin-1')
-alay_dict = pd.read_csv("C:/Users/USER/Documents/VGCN-BERT/VGCN-BERT-master/data/new_kamusalay.csv", encoding='latin-1', header=None)
+alay_dict = pd.read_csv("/Users/imamghozali/Documents/HS-VGCN-BERT/data/new_kamusalay.csv", encoding='latin-1', header=None)
 # alay_dict = pd.read_csv("/Users/imamghozali/Documents/Master/Semester1/RPL/Data/new_kamusalay.csv", encoding='latin-1', header=None)
 alay_dict = alay_dict.rename(columns={0: 'original', 
                                     1: 'replacement'})

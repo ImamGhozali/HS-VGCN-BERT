@@ -49,7 +49,7 @@ Configuration
 '''
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--ds', type=str, default='mr')
+parser.add_argument('--ds', type=str, default='2019')
 parser.add_argument('--load', type=int, default=0)
 parser.add_argument('--sw', type=int, default='0')
 parser.add_argument('--dim', type=int, default='90')
@@ -86,7 +86,7 @@ bert_model_scale = 'indolem/indobertweet-base-uncased'
 do_lower_case = True
 warmup_proportion = 0.1
 
-data_dir='G:/Other computers/My MacBook Air/Master/Semester1/RPL/Data/vgcn_bert'
+data_dir='/Users/imamghozali/Documents/Master/Semester1/RPL/Data/vgcn_bert'
 output_dir = 'output/'
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
